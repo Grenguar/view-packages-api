@@ -2,7 +2,7 @@
   "name": "view-packages-api",
   "version": "1.0.0",
   "description": "REST API for checking what packages are installed in Ubuntu/Debian",
-  "main": "build/app.js",
+  "main": "build/server.js",
   "scripts": {
     "tsc": "tsc",
     "test": "jest",
