@@ -1,15 +1,16 @@
 import express from "express";
-import PackagesFileParser from "./packagesFileParser";
+import PackagesFileParser from "./utils/packagesFileParser";
+import PackagesService from "./service/packagesService";
 
 export const app: express.Application = express();
 
 const mainRoute: string = "/api/packages";
 
-const packagesFileParser: PackagesFileParser = new PackagesFileParser("../files/status.real");
-const fileContent: string = packagesFileParser.readFile();
+const packagesFilePath: string = "../../files/status.real";
+const packagesService: PackagesService = new PackagesService();
 
 app.get(`${mainRoute}/`, (req, res) => {
-  const moduleNames: string[] = packagesFileParser.getAllModuleNames(fileContent);
+  const moduleNames: string[] = packagesService.getAllModuleNames(packagesFilePath);
   res.status(200).send({
     modules: moduleNames
   });

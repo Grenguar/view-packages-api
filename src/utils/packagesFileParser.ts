@@ -9,8 +9,8 @@ export default class PackagesFileParser {
   }
 
   public readFile(): string {
-    const fileData = fs.readFileSync(path.join(__dirname, this.filePath), "utf8");
-    return fileData;
+    const fileContent = fs.readFileSync(path.join(__dirname, this.filePath), "utf8");
+    return fileContent;
   }
 
   public getModulesAsStrings(fileContent: string): string[] {
@@ -21,15 +21,5 @@ export default class PackagesFileParser {
 
   public getModuleName(moduleDesc: string): string {
     return moduleDesc.substring(0, moduleDesc.indexOf("\n") + 1).trim();
-  }
-
-  public getAllModuleNames(fileContent: string): string[] {
-    const modulesArray: string[] = this.getModulesAsStrings(fileContent);
-    const allModuleNames: string[] = [];
-    modulesArray.forEach(moduledesc => {
-      allModuleNames.push(this.getModuleName(moduledesc));
-    });
-    allModuleNames.sort();
-    return allModuleNames;
   }
 }
