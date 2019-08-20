@@ -10,8 +10,8 @@ if (StringToHALConverter) {
     test("Get HALLink for the module named libaspectj-java", async () => {
       const moduleTest = "libaspectj-java";
       const halLink: HALlink = StringToHALConverter.convert(moduleTest, hostPath);
-      console.log(halLink);
       exp(halLink._links.self.href).toBe(`http://localhost:8080/apiv2/packages/${moduleTest}-name`);
+      exp(halLink.name).toBe(moduleTest);
     });
   });
 }

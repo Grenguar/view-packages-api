@@ -34,5 +34,11 @@ if (app) {
       const response = await request(app).get("/apiv2/packages/");
       exp(response.status).toBe(200);
     });
+
+    test("Package info v2 test", async () => {
+      const testPackage: string = "tcpd";
+      const response = await request(app).get(`/apiv2/packages/${testPackage}-name`);
+      exp(response.status).toBe(200);
+    });
   });
 }

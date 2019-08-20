@@ -10,7 +10,6 @@ export default class PackagesServiceV1 {
     modulesArray.forEach(moduledesc => {
       allModuleNames.push(packagesFileParser.getPackageName(moduledesc));
     });
-    allModuleNames.sort();
     return allModuleNames;
   }
 
