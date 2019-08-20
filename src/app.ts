@@ -11,9 +11,9 @@ const packagesFilePath: string = "../../files/status.real";
 const packagesService: PackagesService = new PackagesService();
 
 app.get(`${mainRoute}/`, (req, res) => {
-  const moduleNames: string[] = packagesService.getAllModuleNames(packagesFilePath);
+  const moduleNames: string[] = packagesService.getAllPackagesNames(packagesFilePath);
   res.status(200).send({
-    modules: moduleNames
+    packages: moduleNames
   });
 });
 

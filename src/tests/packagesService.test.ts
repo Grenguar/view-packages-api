@@ -12,7 +12,7 @@ if (PackagesService) {
     });
 
     test("Get all modules list from status.short", async () => {
-      const allModuleNames: string[] = packagesService.getAllModuleNames(STATUS_SHORT_FILEPATH);
+      const allModuleNames: string[] = packagesService.getAllPackagesNames(STATUS_SHORT_FILEPATH);
       exp(allModuleNames.length).toBe(5);
     });
 

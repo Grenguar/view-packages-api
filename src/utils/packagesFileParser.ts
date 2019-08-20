@@ -14,19 +14,19 @@ export default class PackagesFileParser {
     return fileContent;
   }
 
-  public getModulesAsStrings(fileContent: string): string[] {
-    const modulesArray: string[] = fileContent.split("Package: ");
-    modulesArray.shift();
-    return modulesArray;
+  public getPackagesAsString(fileContent: string): string[] {
+    const packages: string[] = fileContent.split("Package: ");
+    packages.shift();
+    return packages;
   }
 
-  public getModuleName(moduleDesc: string): string {
+  public getPackageName(moduleDesc: string): string {
     return moduleDesc.substring(0, moduleDesc.indexOf("\n") + 1).trim();
   }
 
   public getPackageInfo(moduleDesc: string): PackageInfo {
     let packageInfo: PackageInfo = {
-      name: this.getModuleName(moduleDesc),
+      name: this.getPackageName(moduleDesc),
       depends: this.getModuleDependsInfo(moduleDesc),
       description: this.getModuleDescription(moduleDesc).replace(/\n/g, ""),
       dependents: this.getModuleDependents(moduleDesc)
@@ -66,10 +66,10 @@ export default class PackagesFileParser {
 
   private getModuleDependents(moduleDesc: string): string[] {
     let dependents: string[] = [];
-    const moduleName: string = this.getModuleName(moduleDesc);
-    const modulesAsStrings: string[] = this.getModulesAsStrings(this.readFile());
+    const moduleName: string = this.getPackageName(moduleDesc);
+    const modulesAsStrings: string[] = this.getPackagesAsString(this.readFile());
     for (let currentModule of modulesAsStrings) {
-      const currentModuleName = this.getModuleName(currentModule);
+      const currentModuleName = this.getPackageName(currentModule);
       if (moduleName !== currentModule && this.findValueInArray(moduleName, this.getModuleDependsInfo(currentModule))) {
         dependents.push(currentModuleName);
       }

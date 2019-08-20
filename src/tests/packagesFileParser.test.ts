@@ -14,22 +14,22 @@ if (PackagesFileParser) {
     test("Get modules as strings - status.short", async () => {
       const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.short");
       const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getModulesAsStrings(fileContent);
+      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
       exp(modulesArray.length).toBe(5);
     });
 
     test("Get module name from a string - status.short", async () => {
       const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.short");
       const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getModulesAsStrings(fileContent);
-      const moduleName: string = packagesFileParser.getModuleName(modulesArray[2]);
+      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
+      const moduleName: string = packagesFileParser.getPackageName(modulesArray[2]);
       exp(moduleName.trim()).toBe("tcpd");
     });
 
     test("Get module info from a string - status.short", async () => {
       const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.short");
       const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getModulesAsStrings(fileContent);
+      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
       const moduleInfo: PackageInfo = packagesFileParser.getPackageInfo(modulesArray[1]);
       exp(moduleInfo).toStrictEqual({
         name: "python-pkg-resources",
@@ -43,7 +43,7 @@ if (PackagesFileParser) {
     test("Get module info from a string about dependents - status.real", async () => {
       const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.real");
       const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getModulesAsStrings(fileContent);
+      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
       const moduleInfo: PackageInfo = packagesFileParser.getPackageInfo(modulesArray[1]);
       exp(moduleInfo.dependents).toStrictEqual([
         "python-zope.interface",
