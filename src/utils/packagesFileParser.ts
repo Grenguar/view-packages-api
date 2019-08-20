@@ -103,7 +103,10 @@ export default class PackagesFileParser {
       return [];
     }
     dependsPackages.forEach(element => {
-      dependsHAL.push(StringToHALConverter.convert(element, hostPath));
+      const halLink: HALlink = StringToHALConverter.convert(element, hostPath);
+      if (halLink.name !== "null") {
+        dependsHAL.push(halLink);
+      }
     });
     return dependsHAL;
   }
@@ -115,7 +118,10 @@ export default class PackagesFileParser {
       return [];
     }
     dependents.forEach(element => {
-      dependentsHAL.push(StringToHALConverter.convert(element, hostPath));
+      const halLink: HALlink = StringToHALConverter.convert(element, hostPath);
+      if (halLink.name !== "null") {
+        dependentsHAL.push(StringToHALConverter.convert(element, hostPath));
+      }
     });
     return dependentsHAL;
   }

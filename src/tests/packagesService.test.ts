@@ -43,7 +43,6 @@ if (PackagesService) {
 
     test("Get package info libaspectj-java from status.short - packagesServiceV2", async () => {
       const packageInfo = packagesServiceV2.getPackageInfoWithHAL("libaspectj-java", STATUS_SHORT_FILEPATH, HOST);
-      console.log(packageInfo);
       exp(packageInfo!.name).toBe("libaspectj-java");
       exp(packageInfo!.next!.name).toBe("libbsf-java");
       exp(packageInfo!.prev!).toBeNull;
@@ -51,7 +50,6 @@ if (PackagesService) {
 
     test("Get package info tcpd from status.short - packagesServiceV2", async () => {
       const packageInfo = packagesServiceV2.getPackageInfoWithHAL("tcpd", STATUS_SHORT_FILEPATH, HOST);
-      console.log(packageInfo);
       exp(packageInfo!.name).toBe("tcpd");
       exp(packageInfo!.next!).toBeNull;
       exp(packageInfo!.prev!.name).toBe("python-pkg-resources");
