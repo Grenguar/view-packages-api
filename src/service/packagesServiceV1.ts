@@ -1,7 +1,7 @@
 import PackagesFileParser from "../utils/packagesFileParser";
 import { PackageInfo } from "../domain/packageInfo";
 
-export default class PackagesService {
+export default class PackagesServiceV1 {
   public getAllPackagesNames(filePath: string): string[] {
     const packagesFileParser: PackagesFileParser = new PackagesFileParser(filePath);
     const fileContent: string = packagesFileParser.readFile();
