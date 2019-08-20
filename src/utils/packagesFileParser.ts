@@ -25,11 +25,11 @@ export default class PackagesFileParser {
   }
 
   public getPackageInfo(moduleDesc: string): PackageInfo {
-    this.getModuleDescription(moduleDesc);
     let packageInfo: PackageInfo = {
       name: this.getModuleName(moduleDesc),
       depends: this.getModuleDependsInfo(moduleDesc),
-      description: this.getModuleDescription(moduleDesc).replace(/\n/g, "")
+      description: this.getModuleDescription(moduleDesc).replace(/\n/g, ""),
+      dependents: this.getModuleDependents(moduleDesc)
     };
     return packageInfo;
   }
@@ -42,11 +42,11 @@ export default class PackagesFileParser {
       const matchArray = regExDepends.exec(moduleDesc);
       moduleDepends = matchArray![1]
         .replace(regExRoundBrackets, "")
-        .trim()
-        .split(" , ");
+        .replace(/\s+/g, "")
+        .split(",");
       return this.deleteDuplicatesFromArray(moduleDepends);
     }
-    return ["no dependencies"];
+    return [];
   }
 
   private deleteDuplicatesFromArray(array: string[]): string[] {
@@ -62,5 +62,22 @@ export default class PackagesFileParser {
       return matchArray![1];
     }
     return "no description provided";
+  }
+
+  private getModuleDependents(moduleDesc: string): string[] {
+    let dependents: string[] = [];
+    const moduleName: string = this.getModuleName(moduleDesc);
+    const modulesAsStrings: string[] = this.getModulesAsStrings(this.readFile());
+    for (let currentModule of modulesAsStrings) {
+      const currentModuleName = this.getModuleName(currentModule);
+      if (moduleName !== currentModule && this.findValueInArray(moduleName, this.getModuleDependsInfo(currentModule))) {
+        dependents.push(currentModuleName);
+      }
+    }
+    return dependents;
+  }
+
+  private findValueInArray(value: string, array: string[]): boolean {
+    return array.indexOf(value) !== -1;
   }
 }

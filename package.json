@@ -6,6 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "test": "jest",
+    "test-watch": "jest --watch",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/app.ts",
     "prod": "tsc && node ./build/server.js"
   },
