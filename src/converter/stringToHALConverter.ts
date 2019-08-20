@@ -3,7 +3,7 @@ import Self from "../domain/self";
 
 export default class StringToHALConverter {
   public static convert(name: string, hostPath: string): HALlink {
-    let href: string = `http://${hostPath}/${name}-name`;
+    let href: string = `http://${hostPath}/${name}`;
     if (name.indexOf("|") > -1) {
       name = "null";
       href = "null";

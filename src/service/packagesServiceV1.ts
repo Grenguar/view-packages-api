@@ -1,32 +1,36 @@
-import PackagesFileParser from "../utils/packagesFileParser";
+import PackagesFileParser from "../parser/packagesFileParser";
 import { PackageInfo } from "../domain/packageInfo";
 
 export default class PackagesServiceV1 {
-  public getAllPackagesNames(filePath: string): string[] {
-    const packagesFileParser: PackagesFileParser = new PackagesFileParser(filePath);
-    const fileContent: string = packagesFileParser.readFile();
-    const modulesArray: string[] = packagesFileParser.getPackagesAsString(fileContent);
-    const allModuleNames: string[] = [];
-    modulesArray.forEach(moduledesc => {
-      allModuleNames.push(packagesFileParser.getPackageName(moduledesc));
-    });
-    return allModuleNames;
+  sourceFilePath: string;
+  packagesFileParser: PackagesFileParser;
+
+  constructor(sourceFilePath: string) {
+    this.sourceFilePath = sourceFilePath;
+    this.packagesFileParser = new PackagesFileParser(sourceFilePath);
   }
 
-  public getPackageInfo(moduleName: string, filePath: string): PackageInfo | null {
-    const packagesFileParser: PackagesFileParser = new PackagesFileParser(filePath);
-    const fileContent: string = packagesFileParser.readFile();
-    const modulesArray: string[] = packagesFileParser.getPackagesAsString(fileContent);
-    let module = null;
-    for (let currentModule of modulesArray) {
-      const currentModuleName = packagesFileParser.getPackageName(currentModule);
-      if (currentModuleName === moduleName) {
-        module = currentModule;
+  public getNames(): string[] {
+    const packagesDescriptions: string[] = this.packagesFileParser.getRawPackageDescriptions();
+    const allNames: string[] = [];
+    packagesDescriptions.forEach(packageDesc => {
+      allNames.push(this.packagesFileParser.getPackageName(packageDesc));
+    });
+    return allNames;
+  }
+
+  public getPackageInfo(name: string): PackageInfo | null {
+    const packagesDescriptions: string[] = this.packagesFileParser.getRawPackageDescriptions();
+    let packageDescription = null;
+    for (let current of packagesDescriptions) {
+      const currentName = this.packagesFileParser.getPackageName(current);
+      if (currentName === name) {
+        packageDescription = current;
         break;
       }
     }
-    if (module) {
-      return packagesFileParser.getPackageInfo(module);
+    if (packageDescription) {
+      return this.packagesFileParser.getPackageInfo(packageDescription);
     }
     return null;
   }

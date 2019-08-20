@@ -1,37 +1,32 @@
-import PackagesFileParser from "../utils/packagesFileParser";
+import PackagesFileParser from "../parser/packagesFileParser";
 import { PackageInfo } from "../domain/packageInfo";
 
 let exp = expect as jest.Expect;
 
-if (PackagesFileParser) {
-  describe("Test PackagesFileParser", () => {
-    test("Read file - exampleFile", async () => {
-      const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/exampleFile");
-      const fileContent: string = packagesFileParser.readFile();
-      exp(fileContent).toBe("hello, fileReader!");
-    });
+let packagesFileParser: PackagesFileParser;
+let packagesDescriptions: string[];
+let statusShortPath: string = "../../files/status.short";
 
+if (PackagesFileParser) {
+  beforeAll(() => {
+    packagesFileParser = new PackagesFileParser(statusShortPath);
+  });
+
+  describe("Test PackagesFileParser", () => {
     test("Get modules as strings - status.short", async () => {
-      const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.short");
-      const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
-      exp(modulesArray.length).toBe(5);
+      exp(packagesFileParser.getRawPackageDescriptions().length).toBe(5);
     });
 
     test("Get module name from a string - status.short", async () => {
-      const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.short");
-      const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
-      const moduleName: string = packagesFileParser.getPackageName(modulesArray[2]);
+      const packagesDescriptions = packagesFileParser.getRawPackageDescriptions();
+      const moduleName: string = packagesFileParser.getPackageName(packagesDescriptions[2]);
       exp(moduleName.trim()).toBe("libws-commons-util-java");
     });
 
     test("Get package info python-pkg-resources from a string - status.short", async () => {
-      const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.short");
-      const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
-      const moduleInfo: PackageInfo = packagesFileParser.getPackageInfo(modulesArray[3]);
-      exp(moduleInfo).toStrictEqual({
+      const packagesDescriptions = packagesFileParser.getRawPackageDescriptions();
+      const packageInfo: PackageInfo = packagesFileParser.getPackageInfo(packagesDescriptions[3]);
+      exp(packageInfo).toStrictEqual({
         name: "python-pkg-resources",
         depends: ["python"],
         description:
@@ -41,11 +36,11 @@ if (PackagesFileParser) {
     });
 
     test("Get module info from a string about dependents - status.real", async () => {
-      const packagesFileParser: PackagesFileParser = new PackagesFileParser("../../files/status.real");
-      const fileContent: string = packagesFileParser.readFile();
-      const modulesArray = packagesFileParser.getPackagesAsString(fileContent);
-      const moduleInfo: PackageInfo = packagesFileParser.getPackageInfo(modulesArray[3]);
-      exp(moduleInfo.dependents).toStrictEqual(["ant-optional", "velocity"]);
+      const statusRealPath: string = "../../files/status.real";
+      packagesFileParser.setFilePath(statusRealPath);
+      const packagesDescriptions = packagesFileParser.getRawPackageDescriptions();
+      const packageInfo: PackageInfo = packagesFileParser.getPackageInfo(packagesDescriptions[3]);
+      exp(packageInfo.dependents).toStrictEqual(["ant-optional", "velocity"]);
     });
   });
 }
