@@ -10,7 +10,6 @@ export default class StringToHALConverter {
     };
     return {
       _links: self,
-      id: name,
       name: name
     };
   }

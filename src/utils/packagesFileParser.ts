@@ -1,6 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { PackageInfo } from "../domain/packageInfo";
+import { PackageInfo, PackageInfoHAL } from "../domain/packageInfo";
+import HALlink from "../domain/halLink";
+import StringToHALConverter from "../converter/stringToHALConverter";
 
 export default class PackagesFileParser {
   filePath: string;
@@ -17,6 +19,7 @@ export default class PackagesFileParser {
   public getPackagesAsString(fileContent: string): string[] {
     const packages: string[] = fileContent.split("Package: ");
     packages.shift();
+    packages.sort();
     return packages;
   }
 
@@ -79,5 +82,41 @@ export default class PackagesFileParser {
 
   private findValueInArray(value: string, array: string[]): boolean {
     return array.indexOf(value) !== -1;
+  }
+
+  public getPackageInfoHAL(moduleDesc: string, hostPath: string): PackageInfoHAL {
+    let packageInfo: PackageInfoHAL = {
+      name: this.getPackageName(moduleDesc),
+      description: this.getModuleDescription(moduleDesc).replace(/\n/g, ""),
+      _embedded: {
+        depends: this.getModuleDependsInfoHAL(moduleDesc, hostPath),
+        dependents: this.getModuleDependentsHAL(moduleDesc, hostPath)
+      }
+    };
+    return packageInfo;
+  }
+
+  private getModuleDependsInfoHAL(moduleDesc: string, hostPath: string): HALlink[] {
+    let dependsHAL: HALlink[] = [];
+    const dependsPackages: string[] = this.getModuleDependsInfo(moduleDesc);
+    if (dependsPackages.length === 0) {
+      return [];
+    }
+    dependsPackages.forEach(element => {
+      dependsHAL.push(StringToHALConverter.convert(element, hostPath));
+    });
+    return dependsHAL;
+  }
+
+  private getModuleDependentsHAL(moduleDesc: string, hostPath: string): HALlink[] {
+    let dependentsHAL: HALlink[] = [];
+    const dependents: string[] = this.getModuleDependents(moduleDesc);
+    if (dependents.length === 0) {
+      return [];
+    }
+    dependents.forEach(element => {
+      dependentsHAL.push(StringToHALConverter.convert(element, hostPath));
+    });
+    return dependentsHAL;
   }
 }

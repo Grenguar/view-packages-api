@@ -10,6 +10,12 @@ export interface PackageInfo {
 export interface PackageInfoHAL {
   name: string;
   description: string;
+  _embedded?: {
+    depends?: HALlink[];
+    dependents?: HALlink[];
+  };
   depends?: HALlink[];
   dependents?: HALlink[];
+  next?: HALlink;
+  prev?: HALlink;
 }
