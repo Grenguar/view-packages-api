@@ -29,5 +29,10 @@ if (app) {
       exp(response.body.name).toBe(testPackage);
       exp(response.body.depends.length).toBe(2);
     });
+
+    test("Main route v2 test", async () => {
+      const response = await request(app).get("/apiv2/packages/");
+      exp(response.status).toBe(200);
+    });
   });
 }

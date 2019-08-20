@@ -1,4 +1,4 @@
-import PackagesService from "../service/packagesService";
+import PackagesService from "../service/packagesServiceV1";
 
 const exp = expect as jest.Expect;
 const STATUS_SHORT_FILEPATH = "../../files/status.short";
