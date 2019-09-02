@@ -25,3 +25,7 @@ HATEOAS implementation
 
 - GET http://localhost:8080/api/v2/packages/
 - GET http://localhost:8080/api/v2/packages/vim-common
+
+## To run with Docker
+
+- From root folder `docker build -t view_packages_api . && docker run --rm -i -p 8080:8080 --name=view_packages_api -t view_packages_api`
