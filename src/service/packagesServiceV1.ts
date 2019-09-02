@@ -11,24 +11,11 @@ export default class PackagesServiceV1 {
   }
 
   public getNames(): string[] {
-    const packagesDescriptions: string[] = this.packagesFileParser.getRawPackageDescriptions();
-    const allNames: string[] = [];
-    packagesDescriptions.forEach(packageDesc => {
-      allNames.push(this.packagesFileParser.getPackageName(packageDesc));
-    });
-    return allNames;
+    return this.packagesFileParser.getPackageNames();
   }
 
   public getPackageInfo(name: string): PackageInfo | null {
-    const packagesDescriptions: string[] = this.packagesFileParser.getRawPackageDescriptions();
-    let packageDescription = null;
-    for (let current of packagesDescriptions) {
-      const currentName = this.packagesFileParser.getPackageName(current);
-      if (currentName === name) {
-        packageDescription = current;
-        break;
-      }
-    }
+    const packageDescription: string | null = this.packagesFileParser.findPackageByName(name);
     if (packageDescription) {
       return this.packagesFileParser.getPackageInfo(packageDescription);
     }

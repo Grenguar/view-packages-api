@@ -26,6 +26,26 @@ export default class PackagesFileParser {
     return packageDesc.substring(0, packageDesc.indexOf("\n") + 1).trim();
   }
 
+  public getPackageNames(): string[] {
+    const packageNames: string[] = [];
+    this.getRawPackageDescriptions().forEach(packageDesc => {
+      packageNames.push(this.getPackageName(packageDesc));
+    });
+    return packageNames;
+  }
+
+  public findPackageByName(packageName: string): string | null {
+    let packageDescription = null;
+    for (let current of this.getRawPackageDescriptions()) {
+      const currentName = this.getPackageName(current);
+      if (currentName === packageName) {
+        packageDescription = current;
+        break;
+      }
+    }
+    return packageDescription;
+  }
+
   public getPackageInfo(packageDesc: string): PackageInfo {
     let packageInfo: PackageInfo = {
       name: this.getPackageName(packageDesc),
@@ -42,7 +62,7 @@ export default class PackagesFileParser {
       description: this.getPackageDescription(moduleDesc),
       _embedded: {
         depends: this.convertPackages(this.getPackageDependsInfo(moduleDesc), moduleDesc, hostPath),
-        dependents: this.convertPackages(this.getPackageDependsInfo(moduleDesc), moduleDesc, hostPath)
+        dependents: this.convertPackages(this.getPackageDependents(moduleDesc), moduleDesc, hostPath)
       }
     };
     return packageInfo;
