@@ -52,5 +52,12 @@ if (PackagesService) {
       exp(packageInfo!.next!).toBeNull;
       exp(packageInfo!.prev!.name).toBe("python-pkg-resources");
     });
+
+    test("Get package info tcpd from status.short - packagesServiceV2", async () => {
+      const t = () => {
+        packagesServiceV2.getPackageInfoWithHAL("non-existent-package", HOST);
+      };
+      expect(t).toThrow(Error);
+    });
   });
 }

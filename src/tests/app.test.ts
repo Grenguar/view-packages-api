@@ -28,6 +28,12 @@ if (app) {
       exp(response.body.depends.length).toBe(2);
     });
 
+    test("Package info of some-non-existing-package", async () => {
+      const nonExistentTestPackage: string = "some-non-existing-package";
+      const response = await request(app).get(`${routeV1}/${nonExistentTestPackage}`);
+      exp(response.status).toBe(400);
+    });
+
     test("Main route v2 test", async () => {
       const response = await request(app).get("/api/v2/packages/");
       exp(response.status).toBe(200);
@@ -39,6 +45,12 @@ if (app) {
       const response = await request(app).get(`/api/v2/packages/${testPackage}`);
       exp(response.status).toBe(200);
       exp(response.header["content-type"].indexOf("application/hal+json") > -1).toBe(true);
+    });
+
+    test("Package info v2 test - non-existent package", async () => {
+      const testPackage: string = "non-existent-package";
+      const response = await request(app).get(`/api/v2/packages/${testPackage}`);
+      exp(response.status).toBe(400);
     });
   });
 }

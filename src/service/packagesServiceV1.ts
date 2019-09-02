@@ -1,5 +1,5 @@
 import PackagesFileParser from "../parser/packagesFileParser";
-import { PackageInfo } from "../domain/packageInfo";
+import { IPackageInfo } from "../domain/packageInfo";
 
 export default class PackagesServiceV1 {
   public packagesFileParser: PackagesFileParser;
@@ -12,10 +12,15 @@ export default class PackagesServiceV1 {
     return this.packagesFileParser.getPackageNames();
   }
 
-  public getPackageInfo(name: string): PackageInfo | null {
-    const packageDescription: string | null = this.packagesFileParser.findPackageByName(name);
-    if (packageDescription) {
-      return this.packagesFileParser.getPackageInfo(packageDescription);
+  public getPackageInfo(name: string): IPackageInfo | null {
+    try {
+      const packageDescription: string | null = this.packagesFileParser.findPackageByName(name);
+      if (packageDescription) {
+        const packageInfo: IPackageInfo = this.packagesFileParser.getPackageInfo(packageDescription);
+        return packageInfo;
+      }
+    } catch (e) {
+      throw new Error("Package cannot be found");
     }
     return null;
   }

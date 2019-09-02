@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { PackageInfo, PackageInfoHAL } from "../domain/packageInfo";
+import { IPackageInfo, IPackageInfoHAL } from "../domain/packageInfo";
 import HALlink from "../domain/halLink";
 import StringToHALConverter from "../converter/stringToHALConverter";
 
@@ -43,10 +43,13 @@ export default class PackagesFileParser {
         break;
       }
     }
+    if (packageDescription === null) {
+      throw Error("Error: Package is not found");
+    }
     return packageDescription;
   }
 
-  public getPackageInfo(packageDesc: string): PackageInfo {
+  public getPackageInfo(packageDesc: string): IPackageInfo {
     return {
       name: this.getPackageName(packageDesc),
       description: this.getPackageDescription(packageDesc).replace(/\n/g, ""),
@@ -55,7 +58,7 @@ export default class PackagesFileParser {
     };
   }
 
-  public getPackageInfoHAL(moduleDesc: string, hostPath: string): PackageInfoHAL {
+  public getPackageInfoHAL(moduleDesc: string, hostPath: string): IPackageInfoHAL {
     return {
       name: this.getPackageName(moduleDesc),
       description: this.getPackageDescription(moduleDesc),

@@ -1,6 +1,6 @@
 import express from "express";
 import PackagesServiceV1 from "./service/packagesServiceV1";
-import { PackageInfo, PackageInfoHAL } from "./domain/packageInfo";
+import { IPackageInfo, IPackageInfoHAL } from "./domain/packageInfo";
 import PackagesServiceV2 from "./service/packagesServiceV2";
 import HALlink from "./domain/halLink";
 
@@ -21,12 +21,13 @@ app.get(`${mainRoute}/`, (req, res) => {
 });
 
 app.get(`${mainRoute}/:package`, (req, res) => {
-  const params: any = req.params;
-  const packageInfo: PackageInfo | null = packagesService.getPackageInfo(params.package);
-  if (typeof packageInfo === null) {
-    res.status(400).end("Error occured. Check the name of the package or the file");
+  try {
+    const params: any = req.params;
+    const packageInfo: IPackageInfo | null = packagesService.getPackageInfo(params.package);
+    res.status(200).send(packageInfo);
+  } catch (e) {
+    res.status(400).send("Error occured. Check the name of the package from packages list");
   }
-  res.status(200).send(packageInfo);
 });
 
 app.get(`${mainRouteV2}/`, (req, res) => {
@@ -41,16 +42,17 @@ app.get(`${mainRouteV2}/`, (req, res) => {
 });
 
 app.get(`${mainRouteV2}/:package`, (req, res) => {
-  const hostPath: string = `${req.headers.host}${mainRouteV2}`;
-  const params: any = req.params;
-  const packageInfo: PackageInfoHAL | null = packagesServiceV2.getPackageInfoWithHAL(params.package, hostPath);
-  if (typeof packageInfo === null) {
-    res.status(400).end("Error occured. Check the name of the package or the file");
+  try {
+    const hostPath: string = `${req.headers.host}${mainRouteV2}`;
+    const params: any = req.params;
+    const packageInfo: IPackageInfoHAL | null = packagesServiceV2.getPackageInfoWithHAL(params.package, hostPath);
+    res
+      .set("Content-Type", "application/hal+json")
+      .status(200)
+      .send(packageInfo);
+  } catch (e) {
+    res.status(400).send("Error occured. Check the name of the package or the file");
   }
-  res
-    .set("Content-Type", "application/hal+json")
-    .status(200)
-    .send(packageInfo);
 });
 
 export default app;

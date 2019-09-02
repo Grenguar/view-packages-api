@@ -1,4 +1,4 @@
-import { PackageInfo } from "../domain/packageInfo";
+import { IPackageInfo } from "../domain/packageInfo";
 import PackagesFileParser from "../parser/packagesFileParser";
 
 const exp = expect as jest.Expect;
@@ -25,7 +25,7 @@ if (PackagesFileParser) {
 
     test("Get package info python-pkg-resources from a string - status.short", async () => {
       packagesDescriptions = packagesFileParser.getRawPackageDescriptions();
-      const packageInfo: PackageInfo = packagesFileParser.getPackageInfo(packagesDescriptions[3]);
+      const packageInfo: IPackageInfo = packagesFileParser.getPackageInfo(packagesDescriptions[3]);
       exp(packageInfo).toStrictEqual({
         name: "python-pkg-resources",
         depends: ["python"],
@@ -35,11 +35,18 @@ if (PackagesFileParser) {
       });
     });
 
+    test("Get package info for non-existent package - status.short", async () => {
+      const t = () => {
+        packagesFileParser.findPackageByName("some-non-existent-package");
+      };
+      expect(t).toThrow(Error);
+    });
+
     test("Get module info from a string about dependents - status.real", async () => {
       const statusRealPath: string = "../../files/status.real";
       packagesFileParser.setFilePath(statusRealPath);
       packagesDescriptions = packagesFileParser.getRawPackageDescriptions();
-      const packageInfo: PackageInfo = packagesFileParser.getPackageInfo(packagesDescriptions[3]);
+      const packageInfo = packagesFileParser.getPackageInfo(packagesDescriptions[3]);
       exp(packageInfo.dependents).toStrictEqual(["ant-optional", "velocity"]);
     });
   });
