@@ -16,7 +16,7 @@ const packagesServiceV2: PackagesServiceV2 = new PackagesServiceV2(packagesFileP
 app.get(`${mainRoute}/`, (req, res) => {
   const moduleNames: string[] = packagesService.getNames();
   res.status(200).send({
-    packages: moduleNames
+    packages: moduleNames,
   });
 });
 
@@ -36,7 +36,7 @@ app.get(`${mainRouteV2}/`, (req, res) => {
     .set("Content-Type", "application/hal+json")
     .status(200)
     .send({
-      packages: packageNamesHAL
+      packages: packageNamesHAL,
     });
 });
 

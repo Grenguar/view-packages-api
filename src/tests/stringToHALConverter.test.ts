@@ -2,7 +2,7 @@ import StringToHALConverter from "../converter/stringToHALConverter";
 import HALlink from "../domain/halLink";
 
 const exp = expect as jest.Expect;
-let hostPath = "localhost:8080/apiv2/packages";
+const hostPath = "localhost:8080/apiv2/packages";
 
 if (StringToHALConverter) {
   describe("Test StringToHALConverter", () => {

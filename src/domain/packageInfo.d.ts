@@ -1,13 +1,13 @@
 import HALlink from "./halLink";
 
-export interface PackageInfo {
+export interface IPackageInfo {
   name: string;
   description: string;
   depends?: string[];
   dependents?: string[];
 }
 
-export interface PackageInfoHAL {
+export interface IPackageInfoHAL {
   name: string;
   description: string;
   _embedded?: {

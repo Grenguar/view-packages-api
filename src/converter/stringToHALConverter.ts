@@ -10,12 +10,12 @@ export default class StringToHALConverter {
     }
     const self: Self = {
       self: {
-        href: href
-      }
+        href,
+      },
     };
     return {
       _links: self,
-      name: name
+      name,
     };
   }
 }

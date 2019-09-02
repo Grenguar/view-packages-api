@@ -2,11 +2,9 @@ import PackagesFileParser from "../parser/packagesFileParser";
 import { PackageInfo } from "../domain/packageInfo";
 
 export default class PackagesServiceV1 {
-  sourceFilePath: string;
-  packagesFileParser: PackagesFileParser;
+  public packagesFileParser: PackagesFileParser;
 
   constructor(sourceFilePath: string) {
-    this.sourceFilePath = sourceFilePath;
     this.packagesFileParser = new PackagesFileParser(sourceFilePath);
   }
 

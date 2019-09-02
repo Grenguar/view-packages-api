@@ -1,5 +1,5 @@
 import HrefLink from "./hrefLink";
 
-export default interface Self {
+export default interface ISelf {
   self: HrefLink;
 }

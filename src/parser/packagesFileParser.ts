@@ -36,7 +36,7 @@ export default class PackagesFileParser {
 
   public findPackageByName(packageName: string): string | null {
     let packageDescription = null;
-    for (let current of this.getRawPackageDescriptions()) {
+    for (const current of this.getRawPackageDescriptions()) {
       const currentName = this.getPackageName(current);
       if (currentName === packageName) {
         packageDescription = current;
@@ -47,25 +47,23 @@ export default class PackagesFileParser {
   }
 
   public getPackageInfo(packageDesc: string): PackageInfo {
-    let packageInfo: PackageInfo = {
+    return {
       name: this.getPackageName(packageDesc),
       description: this.getPackageDescription(packageDesc).replace(/\n/g, ""),
       depends: this.getPackageDependsInfo(packageDesc),
-      dependents: this.getPackageDependents(packageDesc)
+      dependents: this.getPackageDependents(packageDesc),
     };
-    return packageInfo;
   }
 
   public getPackageInfoHAL(moduleDesc: string, hostPath: string): PackageInfoHAL {
-    let packageInfo: PackageInfoHAL = {
+    return {
       name: this.getPackageName(moduleDesc),
       description: this.getPackageDescription(moduleDesc),
       _embedded: {
         depends: this.convertPackages(this.getPackageDependsInfo(moduleDesc), moduleDesc, hostPath),
-        dependents: this.convertPackages(this.getPackageDependents(moduleDesc), moduleDesc, hostPath)
-      }
+        dependents: this.convertPackages(this.getPackageDependents(moduleDesc), moduleDesc, hostPath),
+      },
     };
-    return packageInfo;
   }
 
   private readFile(): string {
@@ -90,7 +88,7 @@ export default class PackagesFileParser {
 
   private arrayWithoutDuplicates(array: string[]): string[] {
     return array.filter((item, pos) => {
-      return array.indexOf(item) == pos;
+      return array.indexOf(item) === pos;
     });
   }
 
@@ -104,10 +102,10 @@ export default class PackagesFileParser {
   }
 
   private getPackageDependents(moduleDesc: string): string[] {
-    let dependents: string[] = [];
+    const dependents: string[] = [];
     const moduleName: string = this.getPackageName(moduleDesc);
     const modulesAsStrings: string[] = this.getRawPackageDescriptions();
-    for (let currentModule of modulesAsStrings) {
+    for (const currentModule of modulesAsStrings) {
       const currentModuleName = this.getPackageName(currentModule);
       if (
         moduleName !== currentModule &&
@@ -124,7 +122,7 @@ export default class PackagesFileParser {
   }
 
   private convertPackages(packages: string[], moduleDesc: string, hostPath: string): HALlink[] {
-    let halArray: HALlink[] = [];
+    const halArray: HALlink[] = [];
     if (packages.length === 0) {
       return [];
     }

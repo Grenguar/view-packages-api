@@ -1,3 +1,3 @@
-export default interface HrefLink {
+export default interface IHrefLink {
   href: string;
 }

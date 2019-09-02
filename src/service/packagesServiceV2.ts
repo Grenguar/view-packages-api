@@ -6,9 +6,8 @@ import PackagesFileParser from "../parser/packagesFileParser";
 
 export default class PackagesServiceV2 extends PackagesServiceV1 {
   public getAllPackagesNamesWithHAL(host: string): HALLink[] {
-    let halLinks: HALLink[] = [];
-    let packageNames: string[] = this.getNames();
-    packageNames.forEach(element => {
+    const halLinks: HALLink[] = [];
+    this.getNames().forEach(element => {
       halLinks.push(StringToHALConverter.convert(element, host));
     });
     return halLinks;
@@ -26,7 +25,7 @@ export default class PackagesServiceV2 extends PackagesServiceV1 {
           currentModule,
           host,
           index,
-          array
+          array,
         );
         return;
       }
@@ -40,12 +39,12 @@ export default class PackagesServiceV2 extends PackagesServiceV1 {
     currentModule: string,
     host: string,
     index: number,
-    array: string[]
+    array: string[],
   ) {
     packageInfoHal = packagesFileParser.getPackageInfoHAL(currentModule, host);
-    let currIndex = index;
-    let nextIndex = currIndex + 1;
-    let prevIndex = currIndex - 1;
+    const currIndex = index;
+    const nextIndex = currIndex + 1;
+    const prevIndex = currIndex - 1;
     if (nextIndex !== array.length && array[nextIndex]) {
       packageInfoHal.next = StringToHALConverter.convert(packagesFileParser.getPackageName(array[nextIndex]), host);
     }

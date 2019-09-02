@@ -1,7 +1,7 @@
 import app from "../app";
 import request from "supertest";
 
-let exp = expect as jest.Expect;
+const exp = expect as jest.Expect;
 
 const routeV1: string = "/api/v1/packages";
 
